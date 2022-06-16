@@ -1,4 +1,5 @@
 from typing import Iterable
+import random
 
 UNCULTURED_WORDS = ('kotleta', 'pirog')
 
@@ -13,6 +14,8 @@ def greet_user(name: str) -> str:
     """
 
     # пиши код здесь
+
+    greeting = "Приветствуем вас, " + name
     return greeting
 
 
@@ -29,6 +32,8 @@ def get_amount() -> float:
     """
 
     # пиши код здесь
+    amount = random.uniform(100.00, 1000000.00)
+    amount = float('{:.2f}'.format(amount))
     return amount
 
 
@@ -43,6 +48,18 @@ def is_phone_correct(phone_number: str) -> bool:
     """
 
     # пиши код здесь
+
+    f = 0
+    if len(phone_number) == 12 and phone_number[0] == '+' and phone_number[1] == '7':
+        f = 1
+    for i in list(range(2, 11, 1)):
+        if ord(phone_number[i]) < 48 or ord(phone_number[i]) > 57:
+            f = 0
+        if f == 1:
+            result = True
+        else:
+            result = False
+
     return result
 
 
@@ -57,8 +74,12 @@ def is_amount_correct(current_amount: float, transfer_amount: str) -> bool:
     :return: буленовское значение - bool: True - если перевод возможен,
                                           False - если денег недостаточно
     """
-
+    
     # пиши код здесь
+    if float(current_amount) >= float(transfer_amount):
+        result = True
+    else:
+        result = False
     return result
 
 
@@ -78,6 +99,41 @@ def moderate_text(text: str, uncultured_words: Iterable[str]) -> str:
     """
 
     # пиши код здесь
+    k = 0
+    result=""
+    while ord(text[k]) == 32:
+        k += 1
+    asci=ord(text[k])
+    if asci >= 97 and asci <= 122:
+        asci -= 32
+    result += chr(asci)
+    k += 1
+    while k < len(text):
+        asci = ord(text[k])
+        if asci >= 65 and asci <= 90:
+            asci += 32
+            result += chr(asci)
+        elif asci == 34 or asci == 39:
+            result += ""
+        else:
+            result += chr(asci)
+        k += 1
+    k = len(result)-1
+    while ord(result[k]) == 32:
+        k -= 1
+    result=result[:k+1]
+
+    n=len(uncultured_words)
+    num=[0 for i in range(n)]
+    print(result, "+", k,n,num[0],num[1])
+    for i in range(0,n):
+        num[i] = result.find(uncultured_words[i])
+        print(num[i],uncultured_words[i],i)
+        for j in range(num[i],num[i]+len(uncultured_words[i])):
+            if num[i]>=0:
+                result=result[:j]+"#"+result[j+1:]
+
+    print(result,"+",k,num[0],num[1])
     return result
 
 
@@ -99,6 +155,32 @@ def create_request_for_loan(user_info: str) -> str:
     :param user_info: строка с информацией о клиенте
     :return: текст кредитной заявки
     """
-
+    # arr = list(map(user_info.split(',')))
     # пиши код здесь
+    k = 0
+    fam = ""
+    name = ""
+    otc = ""
+    date = ""
+    sum = ""
+    while ord(user_info[k]) != 44:
+        fam += user_info[k]
+        k += 1
+    k += 1
+    while ord(user_info[k]) != 44:
+        name += user_info[k]
+        k += 1
+    k += 1
+    while ord(user_info[k]) != 44:
+        otc += user_info[k]
+        k += 1
+    k += 1
+    while ord(user_info[k]) != 44:
+        date += user_info[k]
+        k += 1
+    k += 1
+    while k != len(user_info):
+        sum += user_info[k]
+        k += 1
+    result="Фамилия: "+fam+"\n"+"Имя: "+name+"\n"+"Отчество: "+otc+"\n"+"Дата рождения: "+date+"\n"+"Запрошенная сумма: "+sum
     return result
